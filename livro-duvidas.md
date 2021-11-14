@@ -7,3 +7,6 @@
 ### 1.2.4 Base Ortonormal
 
 - $a_l$ ?
+
+### 1.2.5 Desigualdade de Cauchy-Schwarz
+
