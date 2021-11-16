@@ -10,3 +10,9 @@
 
 ### 1.2.5 Desigualdade de Cauchy-Schwarz
 
+### 1.3.2 Funcional Linear
+
+### 1.3.3 Projeção e Relação de Completude
+
+### 1.4.4 Diagonaliza¸c˜ao de Operadores
+
