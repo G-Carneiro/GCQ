@@ -12,7 +12,6 @@ c_result = ClassicalRegister(1)
 quantum_circuit: QuantumCircuit = QuantumCircuit(psi, bell, c_0, c_1, c_result)
 
 # create bell 00 state
-
 quantum_circuit.h(1)
 quantum_circuit.cx(bell_0, bell_1)
 
@@ -26,6 +25,7 @@ quantum_circuit.measure(bell_0, c_1)
 quantum_circuit.x(bell_1).c_if(c_1, 1)
 quantum_circuit.z(bell_1).c_if(c_0, 1)
 quantum_circuit.measure(bell_1, c_result)
+
 aer_sim = AerSimulator()
 counts = aer_sim.run(quantum_circuit).result().get_counts()
 qubit_counts = [marginal_counts(counts, [qubit]) for qubit in range(3)]
