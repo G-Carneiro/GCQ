@@ -29,6 +29,17 @@ def phase_oracle(state: str) -> Gate:
     return gate
 
 
+def multiple_state_phase_oracle(states: List[str]) -> Gate:
+    qc: QuantumCircuit = QuantumCircuit(len(states[0]))
+    for state in states:
+        qc.append(phase_oracle(state), qc.qubits)
+
+    gate: Gate = qc.to_gate()
+    gate.name = "Oracle"
+
+    return gate
+
+
 def multiple_control_gate(qc: QuantumCircuit,
                           control_qubits: Union[QuantumRegister, List[int]],
                           work_qubits: Union[QuantumRegister, List[int]],
@@ -56,7 +67,8 @@ def multiple_control_gate(qc: QuantumCircuit,
 
 
 def grover() -> None:
-    num_qubits: int = 4
+    states: List[str] = ["1010"]
+    num_qubits: int = len(states[0])
 
     circuit: QuantumCircuit = QuantumCircuit(num_qubits)
 
@@ -66,7 +78,7 @@ def grover() -> None:
 
     circuit.h(circuit.qubits)
 
-    grover_op: Gate = grover_operator("0111")
+    grover_op: Gate = grover_operator(states)
     for _ in range(steps):
         circuit.append(grover_op, circuit.qubits)
 
@@ -98,10 +110,11 @@ def grover_diffuser(size: int) -> Gate:
     return gate
 
 
-def grover_operator(state: str) -> Gate:
-    qc: QuantumCircuit = QuantumCircuit(len(state))
-    qc.append(phase_oracle(state), qc.qubits)
-    qc.append(grover_diffuser(len(state)), qc.qubits)
+def grover_operator(states: List[str]) -> Gate:
+    size: int = len(states[0])
+    qc: QuantumCircuit = QuantumCircuit(size)
+    qc.append(multiple_state_phase_oracle(states), qc.qubits)
+    qc.append(grover_diffuser(size), qc.qubits)
 
     gate: Gate = qc.to_gate()
     gate.name = "G"
