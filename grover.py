@@ -9,16 +9,19 @@ from qiskit.providers.aer.backends.aer_simulator import AerSimulator
 
 def phase_oracle(state: str) -> Gate:
     qc: QuantumCircuit = QuantumCircuit(len(state))
-    for i in range(len(state[:-1])):
+    neg_qubits: List[Qubit] = []
+    state = state[::-1]
+    for i in range(len(state)):
         if (state[i] == "0"):
-            qc.x(qc.qubits[i])
+            neg_qubits.append(qc.qubits[i])
 
-    if (state[-1] == "0"):
-        qc.x(qc.qubits[-1])
-
+    if neg_qubits:
+        qc.x(neg_qubits)
     qc.h(qc.qubits[-1])
     qc.mcx(qc.qubits[:-1], qc.qubits[-1])
     qc.h(qc.qubits[-1])
+    if neg_qubits:
+        qc.x(neg_qubits)
 
     gate: Gate = qc.to_gate()
     gate.name = "Oracle"
@@ -63,12 +66,9 @@ def grover() -> None:
 
     circuit.h(circuit.qubits)
 
+    grover_op: Gate = grover_operator("0111")
     for _ in range(steps):
-        # circuit.barrier()
-        # phase_oracle(state="1111")
-        # circuit.barrier()
-        # circuit.append(grover_diffuser(num_qubits), circuit.qubits)
-        circuit.append(grover_operator("1111"), circuit.qubits)
+        circuit.append(grover_op, circuit.qubits)
 
     circuit.measure_all()
     print(circuit)
