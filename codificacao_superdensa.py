@@ -1,27 +1,9 @@
-from typing import Tuple, Union
+from typing import Tuple
 
-from qiskit import QuantumCircuit, QuantumRegister
+from qiskit import QuantumCircuit
 from qiskit.providers.aer.backends.aer_simulator import AerSimulator
 
-
-def create_bell_pair(quantum_circuit: QuantumCircuit,
-                     control_qubit: Union[int, QuantumRegister],
-                     target_qubit: Union[int, QuantumRegister],
-                     state: Tuple[int, int] = (0, 0)
-                     ) -> None:
-    """
-    Returns:
-        QuantumCircuit: Circuit that produces a Bell pair
-    """
-    if state[0]:
-        quantum_circuit.x(target_qubit)
-
-    if state[1]:
-        quantum_circuit.x(control_qubit)
-
-    quantum_circuit.h(control_qubit)
-    quantum_circuit.cx(control_qubit, target_qubit)
-    return None
+from utils import create_bell_pair
 
 
 def alice_encode(qc: QuantumCircuit,

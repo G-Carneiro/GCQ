@@ -1,7 +1,7 @@
-from math import sqrt, acos, pi
-from typing import Union, List
+from math import sqrt, acos
+from typing import List
 
-from qiskit import QuantumCircuit, QuantumRegister, execute
+from qiskit import QuantumCircuit, execute
 from qiskit.circuit.gate import Gate
 from qiskit.circuit.quantumregister import Qubit
 from qiskit.providers.aer.backends.aer_simulator import AerSimulator
@@ -29,32 +29,6 @@ def phase_oracle(state: str) -> Gate:
     return gate
 
 
-def multiple_control_gate(qc: QuantumCircuit,
-                          control_qubits: Union[QuantumRegister, List[int]],
-                          work_qubits: Union[QuantumRegister, List[int]],
-                          target_qubit: Union[QuantumRegister, int]
-                          ) -> None:
-
-    num_ctrl_qubits: int = len(control_qubits)
-    qc.ccx(control_qubits[0], control_qubits[1], work_qubits[0])
-
-    for i in range(2, num_ctrl_qubits):
-        qc.ccx(control_qubit1=control_qubits[i],
-               control_qubit2=work_qubits[i - 2],
-               target_qubit=work_qubits[i - 1])
-
-    qc.cz(control_qubit=work_qubits[num_ctrl_qubits - 2], target_qubit=target_qubit[0])
-
-    for i in reversed(range(2, num_ctrl_qubits)):
-        qc.ccx(control_qubit1=control_qubits[i],
-               control_qubit2=work_qubits[i - 2],
-               target_qubit=work_qubits[i - 1])
-
-    qc.ccx(control_qubits[0], control_qubits[1], work_qubits[0])
-
-    return None
-
-
 def grover(states: List[str]) -> None:
     num_qubits: int = len(states[0])
 
@@ -63,7 +37,6 @@ def grover(states: List[str]) -> None:
     entries = 2**num_qubits
     steps: int = int(acos(1 / sqrt(entries)) / acos((entries - 2) / entries))
     # steps = int((pi/4)*sqrt(entries/1))
-    print(steps)
 
     circuit.h(circuit.qubits)
 
@@ -72,12 +45,13 @@ def grover(states: List[str]) -> None:
         circuit.append(grover_op, circuit.qubits)
 
     circuit.measure_all()
-    # print(circuit)
 
     sim = AerSimulator()
     counts = execute(circuit, sim).result().get_counts()
 
     print(counts)
+
+    return None
 
 
 def grover_diffuser(size: int) -> Gate:
