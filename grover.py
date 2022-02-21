@@ -1,7 +1,7 @@
-from typing import Union, List
 from math import sqrt, acos, pi
+from typing import Union, List
 
-from qiskit import QuantumCircuit, QuantumRegister, ClassicalRegister, execute
+from qiskit import QuantumCircuit, QuantumRegister, execute
 from qiskit.circuit.gate import Gate
 from qiskit.circuit.quantumregister import Qubit
 from qiskit.providers.aer.backends.aer_simulator import AerSimulator
@@ -22,17 +22,6 @@ def phase_oracle(state: str) -> Gate:
     qc.h(qc.qubits[-1])
     if neg_qubits:
         qc.x(neg_qubits)
-
-    gate: Gate = qc.to_gate()
-    gate.name = "Oracle"
-
-    return gate
-
-
-def multiple_state_phase_oracle(states: List[str]) -> Gate:
-    qc: QuantumCircuit = QuantumCircuit(len(states[0]))
-    for state in states:
-        qc.append(phase_oracle(state), qc.qubits)
 
     gate: Gate = qc.to_gate()
     gate.name = "Oracle"
@@ -66,15 +55,15 @@ def multiple_control_gate(qc: QuantumCircuit,
     return None
 
 
-def grover() -> None:
-    states: List[str] = ["1010"]
+def grover(states: List[str]) -> None:
     num_qubits: int = len(states[0])
 
     circuit: QuantumCircuit = QuantumCircuit(num_qubits)
 
     entries = 2**num_qubits
-    steps: int = round(acos(1 / sqrt(entries)) / acos((entries - 2) / entries))
+    steps: int = int(acos(1 / sqrt(entries)) / acos((entries - 2) / entries))
     # steps = int((pi/4)*sqrt(entries/1))
+    print(steps)
 
     circuit.h(circuit.qubits)
 
@@ -83,7 +72,7 @@ def grover() -> None:
         circuit.append(grover_op, circuit.qubits)
 
     circuit.measure_all()
-    print(circuit)
+    # print(circuit)
 
     sim = AerSimulator()
     counts = execute(circuit, sim).result().get_counts()
@@ -113,7 +102,9 @@ def grover_diffuser(size: int) -> Gate:
 def grover_operator(states: List[str]) -> Gate:
     size: int = len(states[0])
     qc: QuantumCircuit = QuantumCircuit(size)
-    qc.append(multiple_state_phase_oracle(states), qc.qubits)
+    for state in states:
+        qc.append(phase_oracle(state), qc.qubits)
+
     qc.append(grover_diffuser(size), qc.qubits)
 
     gate: Gate = qc.to_gate()
@@ -122,5 +113,4 @@ def grover_operator(states: List[str]) -> Gate:
     return gate
 
 
-grover()
-
+grover(["1010", "1000", "0101"])
