@@ -1,4 +1,4 @@
-from math import sqrt, acos
+from math import sqrt, acos, pi
 from typing import List
 
 from qiskit import QuantumCircuit, execute
@@ -27,31 +27,6 @@ def phase_oracle(state: str) -> Gate:
     gate.name = "Oracle"
 
     return gate
-
-
-def grover(states: List[str]) -> None:
-    num_qubits: int = len(states[0])
-
-    circuit: QuantumCircuit = QuantumCircuit(num_qubits)
-
-    entries = 2**num_qubits
-    steps: int = int(acos(1 / sqrt(entries)) / acos((entries - 2) / entries))
-    # steps = int((pi/4)*sqrt(entries/1))
-
-    circuit.h(circuit.qubits)
-
-    grover_op: Gate = grover_operator(states)
-    for _ in range(steps):
-        circuit.append(grover_op, circuit.qubits)
-
-    circuit.measure_all()
-
-    sim = AerSimulator()
-    counts = execute(circuit, sim).result().get_counts()
-
-    print(counts)
-
-    return None
 
 
 def grover_diffuser(size: int) -> Gate:
@@ -85,6 +60,34 @@ def grover_operator(states: List[str]) -> Gate:
     gate.name = "G"
 
     return gate
+
+
+def grover(states: List[str]) -> None:
+    num_qubits: int = len(states[0])
+
+    circuit: QuantumCircuit = QuantumCircuit(num_qubits)
+
+    entries = 2**num_qubits
+    steps: int = int(acos(1 / sqrt(entries)) / acos((entries - 2) / entries))
+    # print(steps)
+    # steps = int((pi/4)*sqrt(entries/len(states)))
+    # print(steps)
+    print(f"Precisão > {(entries - len(states)) / entries}")
+
+    circuit.h(circuit.qubits)
+
+    grover_op: Gate = grover_operator(states)
+    for _ in range(steps):
+        circuit.append(grover_op, circuit.qubits)
+
+    circuit.measure_all()
+
+    sim = AerSimulator()
+    counts = execute(circuit, sim).result().get_counts()
+
+    print(counts)
+
+    return None
 
 
 grover(["1010", "1000", "0101"])
