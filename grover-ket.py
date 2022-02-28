@@ -1,4 +1,4 @@
-from math import acos, sqrt, pi, ceil
+from math import sqrt, pi
 from typing import List
 
 from ket import *
@@ -46,11 +46,7 @@ def grover(states: List[str]) -> None:
 
     qubits: quant = quant(num_qubits)
     entries = 2**num_qubits
-    steps: int = int(acos(1 / sqrt(entries)) / acos((entries - 2) / entries))
-    # print(steps)
-    # steps = int((pi/4)*sqrt(entries/len(states)))
-    # print(steps)
-    # print(f"Precisão > {(entries - len(states)) / entries}")
+    steps = int((pi/4)*sqrt(entries/len(states)))
 
     H(qubits)
 

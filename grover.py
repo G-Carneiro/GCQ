@@ -1,4 +1,4 @@
-from math import sqrt, acos, pi
+from math import sqrt, pi
 from typing import List
 
 from qiskit import QuantumCircuit, execute
@@ -68,11 +68,7 @@ def grover(states: List[str]) -> None:
     circuit: QuantumCircuit = QuantumCircuit(num_qubits)
 
     entries = 2**num_qubits
-    steps: int = int(acos(1 / sqrt(entries)) / acos((entries - 2) / entries))
-    # print(steps)
-    # steps = int((pi/4)*sqrt(entries/len(states)))
-    # print(steps)
-    print(f"Precisão > {(entries - len(states)) / entries}")
+    steps = int((pi/4)*sqrt(entries/len(states)))
 
     circuit.h(circuit.qubits)
 
