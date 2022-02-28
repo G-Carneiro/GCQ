@@ -1,38 +1,26 @@
-from math import sqrt, pi
+from math import sqrt, pi, log2, ceil
 from typing import List
 
 from ket import *
 
 
-def phase_oracle(qubits: quant, state: str):
-    flip_qubits: List = []
-    # state = state[::-1]
-    for i in range(len(state)):
-        if (state[i] == "0"):
-            flip_qubits.append(qubits[i])
-
-    if flip_qubits:
-        X(flip_qubits)
-    ctrl(qubits[:-1], Z, qubits[-1])
-    if flip_qubits:
-        X(flip_qubits)
+def phase_oracle(qubits: quant, state: int):
+    ctrl(qubits, Z, qubits[-1], on_state=state)
 
     return None
 
 
 def grover_diffuser(qubits: quant):
     H(qubits)
-    X(qubits)
 
-    ctrl(qubits[:-1], Z, qubits[-1])
+    ctrl(qubits, Z, qubits[-1], on_state=0)
 
-    X(qubits)
     H(qubits)
 
     return None
 
 
-def grover_operator(qubits: quant, states: List[str]):
+def grover_operator(qubits: quant, states: List[int]):
     for state in states:
         phase_oracle(qubits, state)
 
@@ -41,8 +29,8 @@ def grover_operator(qubits: quant, states: List[str]):
     return None
 
 
-def grover(states: List[str]) -> None:
-    num_qubits: int = len(states[0])
+def grover(states: List[int]) -> None:
+    num_qubits: int = ceil(log2(max(states)))
 
     qubits: quant = quant(num_qubits)
     entries = 2**num_qubits
@@ -54,8 +42,9 @@ def grover(states: List[str]) -> None:
         grover_operator(qubits, states)
 
     print(dump(qubits).show())
+    # print(measure(qubits).value)
 
     return None
 
 
-grover(["1010", "1000", "0101"])
+grover([10, 8, 5])

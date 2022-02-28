@@ -1,4 +1,4 @@
-from math import sqrt, pi
+from math import sqrt, pi, log2, ceil
 from typing import List
 
 from qiskit import QuantumCircuit, execute
@@ -7,21 +7,24 @@ from qiskit.circuit.quantumregister import Qubit
 from qiskit.providers.aer.backends.aer_simulator import AerSimulator
 
 
-def phase_oracle(state: str) -> Gate:
-    qc: QuantumCircuit = QuantumCircuit(len(state))
-    neg_qubits: List[Qubit] = []
+def phase_oracle(state: int, size: int) -> Gate:
+    state: str = bin(state)[2:]
+    while (len(state) < size):
+        state = "0" + state
+    qc: QuantumCircuit = QuantumCircuit(size)
+    flip_qubits: List[Qubit] = []
     state = state[::-1]
     for i in range(len(state)):
         if (state[i] == "0"):
-            neg_qubits.append(qc.qubits[i])
+            flip_qubits.append(qc.qubits[i])
 
-    if neg_qubits:
-        qc.x(neg_qubits)
+    if flip_qubits:
+        qc.x(flip_qubits)
     qc.h(qc.qubits[-1])
     qc.mcx(qc.qubits[:-1], qc.qubits[-1])
     qc.h(qc.qubits[-1])
-    if neg_qubits:
-        qc.x(neg_qubits)
+    if flip_qubits:
+        qc.x(flip_qubits)
 
     gate: Gate = qc.to_gate()
     gate.name = "Oracle"
@@ -48,11 +51,10 @@ def grover_diffuser(size: int) -> Gate:
     return gate
 
 
-def grover_operator(states: List[str]) -> Gate:
-    size: int = len(states[0])
+def grover_operator(states: List[int], size: int) -> Gate:
     qc: QuantumCircuit = QuantumCircuit(size)
     for state in states:
-        qc.append(phase_oracle(state), qc.qubits)
+        qc.append(phase_oracle(state, size), qc.qubits)
 
     qc.append(grover_diffuser(size), qc.qubits)
 
@@ -62,8 +64,8 @@ def grover_operator(states: List[str]) -> Gate:
     return gate
 
 
-def grover(states: List[str]) -> None:
-    num_qubits: int = len(states[0])
+def grover(states: List[int]) -> None:
+    num_qubits: int = ceil(log2(max(states)))
 
     circuit: QuantumCircuit = QuantumCircuit(num_qubits)
 
@@ -72,7 +74,7 @@ def grover(states: List[str]) -> None:
 
     circuit.h(circuit.qubits)
 
-    grover_op: Gate = grover_operator(states)
+    grover_op: Gate = grover_operator(states, num_qubits)
     for _ in range(steps):
         circuit.append(grover_op, circuit.qubits)
 
@@ -86,4 +88,4 @@ def grover(states: List[str]) -> None:
     return None
 
 
-grover(["1010", "1000", "0101"])
+grover([10, 8, 5])
