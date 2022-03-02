@@ -64,7 +64,7 @@ def grover_operator(states: List[int], size: int) -> Gate:
     return gate
 
 
-def grover(states: List[int]) -> None:
+def grover(states: List[int]) -> int:
     num_qubits: int = ceil(log2(max(states)))
 
     circuit: QuantumCircuit = QuantumCircuit(num_qubits)
@@ -81,11 +81,6 @@ def grover(states: List[int]) -> None:
     circuit.measure_all()
 
     sim = AerSimulator()
-    counts = execute(circuit, sim).result().get_counts()
+    counts = execute(circuit, sim, shots=1).result().get_counts()
 
-    print(counts)
-
-    return None
-
-
-grover([10, 8, 5])
+    return int(list(counts)[0], 2)

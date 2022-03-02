@@ -4,7 +4,7 @@ from typing import List
 from ket import *
 
 
-def phase_oracle(qubits: quant, state: int):
+def phase_oracle(qubits: quant, state: int) -> None:
     ctrl(qubits, Z, qubits[-1], on_state=state)
 
     return None
@@ -20,7 +20,7 @@ def grover_diffuser(qubits: quant):
     return None
 
 
-def grover_operator(qubits: quant, states: List[int]):
+def grover_operator(qubits: quant, states: List[int]) -> None:
     for state in states:
         phase_oracle(qubits, state)
 
@@ -29,7 +29,7 @@ def grover_operator(qubits: quant, states: List[int]):
     return None
 
 
-def grover(states: List[int]) -> None:
+def grover(states: List[int]) -> int:
     num_qubits: int = ceil(log2(max(states)))
 
     qubits: quant = quant(num_qubits)
@@ -41,10 +41,4 @@ def grover(states: List[int]) -> None:
     for _ in range(steps):
         grover_operator(qubits, states)
 
-    print(dump(qubits).show())
-    # print(measure(qubits).value)
-
-    return None
-
-
-grover([10, 8, 5])
+    return measure(qubits).value
