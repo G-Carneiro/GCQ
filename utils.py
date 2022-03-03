@@ -2,6 +2,14 @@ from typing import Union, Tuple, List
 
 from qiskit import QuantumCircuit, QuantumRegister
 
+token: str = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJRQ0" \
+             "xhYnMgU2VydmVyIChRQ0xhYnMpIiwic3ViIjoiUUNMYWJzIFNlc" \
+             "nZlciBVU0VSIHRva2VuIiwiYXVkIjoidXNlciIsImV4cCI6MTY1" \
+             "MzQ4NTIwMiwibmJmIjoxNjQ1NzA5MjAyLCJpYXQiOjE2NDU3MDk" \
+             "yMDIsIm5hbWUiOiJHYWJyaWVsIE1lZGVpcm9zIExvcGVzIENhcm" \
+             "5laXJvIiwiZW1haWwiOiJnYWJyaWVsLm1sY0BncmFkLnVmc2MuY" \
+             "nIifQ.EaBR1X4aPt4mbVWtJs7rgq1Z-CjBYdX0t76Ac-FxDTA"
+
 
 def create_bell_pair(quantum_circuit: QuantumCircuit,
                      control_qubit: Union[int, QuantumRegister],
