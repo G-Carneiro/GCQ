@@ -1,0 +1,82 @@
+%! Author = gabriel
+%! Date = 3/18/22
+
+% Preamble
+\documentclass[12pt]{beamer}
+
+% Packages
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usetheme{Madrid}
+\usecolortheme[named=darkgray]{structure}
+\setbeamercolor{background canvas}{bg=gray}
+%\setbeamercolor{frametitle}{bg=darkgray}
+\setbeamercolor{footline}{bg=darkgray}
+%\setbeamercolor{titlelike}{fg=white}
+\usefonttheme{structuresmallcapsserif}
+\usefonttheme{serif}
+\title{Ket vs Qiskit}
+\author{\href{https://github.com/G-Carneiro}{Gabriel Carneiro}}
+\institute[UFSC]{Universidade Federal de Santa Catarina}
+\date{\today}
+
+\titlegraphic{
+    \includegraphics[scale=0.15]{vertical_extenso_PB_fundo_claro}
+}
+
+%\logo{
+%    \begin{tikzpicture}[overlay,remember picture]
+%        \node[right=0.1cm] at (current page.west){
+%            \includegraphics[scale=0.015]{logo-ufsc-dark}
+%        };
+%    \end{tikzpicture}
+%}
+
+
+
+%\defbeamertemplate*{footline}{mytheme}{%
+%        \begin{beamercolorbox}[wd=1cm,ht=.5cm,center]{title in head/foot}%
+%            \includegraphics[scale=0.01]{logo-ufsc-dark}
+%            {\usebeamercolor{title in head/foot}\insertshortauthor}\makebox[2em][r]{{\usebeamerfont{title in head/foot}{\insertframenumber}}}
+%        \end{beamercolorbox}%
+%}
+
+%\defbeamertemplate*{footline}{mytheme}{
+%\begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5exm]{}
+%    \includegraphics[scale=0.1]{logo-ufsc-dark}
+%\end{beamercolorbox}
+%}
+\setbeamertemplate{title page}[default][rounded=true]
+\setbeamertemplate{footline}{
+    \leavevmode%
+    \hbox{%
+        \begin{beamercolorbox}[wd=0.7\paperwidth,ht=2.25ex,dp=1ex,leftskip=1em]{footline}%
+            \includegraphics[scale=0.05]{vertical_sigla_PB_fundo_claro}\hspace*{1em}%
+            \usebeamerfont{author in head/foot}\insertshortauthor
+        \end{beamercolorbox}%
+%        \begin{beamercolorbox}[wd=.3\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+%            \usebeamerfont{title in head/foot}\insertshorttitle
+%        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.3\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+%            \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+            \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+        \end{beamercolorbox}}%
+    \vskip0pt%
+}
+
+\begin{document}
+    \begin{frame}[plain]
+        \titlepage
+    \end{frame}
+
+    \begin{frame}
+        \frametitle{AAAAA}
+    \end{frame}
+    \begin{frame}
+        \frametitle{AAAAA}
+    \end{frame}
+
+
+
+\end{document}
