@@ -1,10 +1,25 @@
-from math import sqrt, pi, log2, ceil
+from math import sqrt, pi
 from typing import List
 
-from qiskit import QuantumCircuit, execute
+from qiskit import QuantumCircuit, execute, IBMQ, transpile
 from qiskit.circuit.gate import Gate
 from qiskit.circuit.quantumregister import Qubit
 from qiskit.providers.aer.backends.aer_simulator import AerSimulator
+from qiskit.providers.ibmq import least_busy
+from qiskit.tools.monitor import job_monitor
+
+IBMQ.enable_account("98e8a2739b6f1ef5e4855f3eb754f84ee240e"
+                    "8cd5370de304cffa2f527f47fbe3a398efd98"
+                    "6329d655f70a18d3607767474efcf32b72d0f"
+                    "3a7dbfadb3e34ee1f")
+# Load IBM Q account and get the least busy backend device
+provider = IBMQ.get_provider()
+device = least_busy(provider.backends(filters=lambda x: x.configuration().n_qubits >= 5
+                                                        and not x.configuration().simulator
+                                                        and x.status().operational))
+print("Running on current least busy device: ", device)
+# print(provider.backends())
+# backend = provider.get_backend("ibmq_manila")
 
 
 def phase_oracle(state: int, size: int) -> Gate:
@@ -64,13 +79,11 @@ def grover_operator(states: List[int], size: int) -> Gate:
     return gate
 
 
-def grover(states: List[int]) -> int:
-    num_qubits: int = ceil(log2(max(states)))
-
+def grover(states: List[int], num_qubits: int) -> int:
     circuit: QuantumCircuit = QuantumCircuit(num_qubits)
 
-    entries = 2**num_qubits
-    steps = int((pi/4)*sqrt(entries/len(states)))
+    entries = 2 ** num_qubits
+    steps = int((pi / 4) * sqrt(entries / len(states)))
 
     circuit.h(circuit.qubits)
 
@@ -80,7 +93,16 @@ def grover(states: List[int]) -> int:
 
     circuit.measure_all()
 
-    sim = AerSimulator()
-    counts = execute(circuit, sim, shots=1).result().get_counts()
+    # sim = AerSimulator()
+    # counts = execute(circuit, sim, shots=1).result().get_counts()
+    # Run our circuit on the least busy backend. Monitor the execution of the job in the queue
+    transpiled_grover_circuit = transpile(circuit, device, optimization_level=3)
+    job = device.run(transpiled_grover_circuit)
+    job_monitor(job, interval=2)
+    results = job.result()
+    counts = results.get_counts(circuit)
 
     return int(list(counts)[0], 2)
+
+
+print(grover([1], 6))

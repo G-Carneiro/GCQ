@@ -1,7 +1,13 @@
-from math import sqrt, pi, log2, ceil
+from math import sqrt, pi
 from typing import List
 
 from ket import *
+from quantuloop import qubox_ufsc
+
+from utils import qubox_token
+
+qubox_ufsc.set_token(qubox_token)
+qubox_ufsc.set_backend("pbwd")
 
 
 def phase_oracle(qubits: quant, state: int) -> None:
@@ -29,9 +35,7 @@ def grover_operator(qubits: quant, states: List[int]) -> None:
     return None
 
 
-def grover(states: List[int]) -> int:
-    num_qubits: int = ceil(log2(max(states)))
-
+def grover(states: List[int], num_qubits: int) -> int:
     qubits: quant = quant(num_qubits)
     entries = 2**num_qubits
     steps = int((pi/4)*sqrt(entries/len(states)))

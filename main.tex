@@ -6,6 +6,7 @@
 
 % Packages
 \usepackage{amsmath}
+\usepackage{pgfplots}
 \usepackage{hyperref}
 \usepackage{tikz}
 \usetheme{Madrid}
@@ -18,8 +19,8 @@
 \usefonttheme{serif}
 \title{Ket vs Qiskit}
 \author{\href{https://github.com/G-Carneiro}{Gabriel Carneiro}}
-\institute[UFSC]{Universidade Federal de Santa Catarina}
-\date{\today}
+%\institute[UFSC]{Universidade Federal de Santa Catarina}
+%\date{\today}
 
 \titlegraphic{
     \includegraphics[scale=0.15]{vertical_extenso_PB_fundo_claro}
@@ -71,10 +72,21 @@
     \end{frame}
 
     \begin{frame}
-        \frametitle{AAAAA}
+        \frametitle{Parâmetros dos Testes}
+        \begin{itemize}
+            \item 100 replicações.
+            \item $n$ qubits, $n \in [2, 20)$.
+            \item $m$ estados, $m_i \in [0, 2^n)$.
+            \begin{itemize}
+                \item Onde cada estado foi escolhido aleatoriamente.
+            \end{itemize}
+        \end{itemize}
     \end{frame}
     \begin{frame}
-        \frametitle{AAAAA}
+        \frametitle{Ket}
+        \begin{figure}
+            \input{test.tikz}\label{fig:figure}
+        \end{figure}
     \end{frame}
 
 

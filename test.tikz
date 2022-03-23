@@ -1,0 +1,12 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        xmin=2,
+        ymin=0,
+        xlabel={Nº Qubits},
+        ylabel={Time (s)},
+        legend pos=north west,
+        legend entries={qubox, local}]
+        \addplot table [x=qubits, y=average] {ket_qubox_01.dat};
+        \addplot[mark=*] table [x=qubits, y=average] {ket_local_01.dat};
+    \end{axis}
+\end{tikzpicture}
