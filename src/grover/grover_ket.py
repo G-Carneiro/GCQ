@@ -4,7 +4,7 @@ from typing import List
 from ket import *
 from quantuloop import qubox_ufsc
 
-from utils import qubox_token
+from src.utils.utils import qubox_token
 
 qubox_ufsc.set_token(qubox_token)
 qubox_ufsc.set_backend("pbwd")

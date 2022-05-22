@@ -4,7 +4,7 @@ from random import randint
 
 from tabulate import tabulate
 
-from grover import grover
+from src.grover.grover import grover
 
 
 replications: int = 100
@@ -35,6 +35,6 @@ for num_qubits in range(2, 20):
     new_entry = (num_qubits, num_states, replications, average_total_time, precision)
     table.append(new_entry)
 
-with open("qiskit_Aer_01.dat", "w") as file:
+with open("../../dat/grover/qiskit_Aer_01.dat", "w") as file:
     file.write(tabulate(table, headers=["qubits", "states", "replications", "average", "precision"],
                         tablefmt="plain", numalign="left"))

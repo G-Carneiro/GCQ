@@ -3,7 +3,7 @@ from typing import Tuple
 from qiskit import QuantumCircuit
 from qiskit.providers.aer.backends.aer_simulator import AerSimulator
 
-from utils import create_bell_pair
+from src.utils.utils import create_bell_pair
 
 
 def alice_encode(qc: QuantumCircuit,
