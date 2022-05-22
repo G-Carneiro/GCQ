@@ -4,7 +4,7 @@ from random import randint
 
 from tabulate import tabulate
 
-from grover_ket import grover
+from grover import grover
 
 
 replications: int = 100
@@ -13,7 +13,6 @@ headers: List[str] = ["qubits", "states", "replications", "total time", "precisi
 table: List[Tuple[int, int, int, float, float]] = []
 
 for num_qubits in range(2, 20):
-    print(num_qubits)
     founded_state: int = 0
     sum_total_time: float = 0
     num_states: int = 1
@@ -31,10 +30,11 @@ for num_qubits in range(2, 20):
             founded_state += 1
 
     average_total_time: float = sum_total_time / replications
+    print(num_qubits, average_total_time)
     precision: float = founded_state / replications
     new_entry = (num_qubits, num_states, replications, average_total_time, precision)
     table.append(new_entry)
 
-with open("ket_qubox_pbwd_01.dat", "w") as file:
+with open("qiskit_Aer_01.dat", "w") as file:
     file.write(tabulate(table, headers=["qubits", "states", "replications", "average", "precision"],
                         tablefmt="plain", numalign="left"))
