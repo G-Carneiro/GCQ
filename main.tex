@@ -7,17 +7,20 @@
 % Packages
 \usepackage{amsmath}
 \usepackage{pgfplots}
+\usepackage{minted}
 \usepackage[utf8]{inputenc}
 \usepackage{hyperref}
 \usepackage{tikz}
 \usepackage{braket}
 \usepackage{svg}
+\usepackage{xcolor}
 
 \usetheme{Madrid}
 \usecolortheme[named=darkgray]{structure}
 \setbeamercolor{background canvas}{bg=gray}
 %\setbeamercolor{frametitle}{bg=darkgray}
 \setbeamercolor{footline}{bg=darkgray}
+\setbeamertemplate{enumerate items}[default]
 %\setbeamercolor{titlelike}{fg=white}
 %\usefonttheme{structuresmallcapsserif}
 \usefonttheme{serif}
@@ -26,32 +29,16 @@
 %\institute[UFSC]{Universidade Federal de Santa Catarina}
 %\date{\today}
 
+\setminted[python]{
+    breaklines,
+    fontsize=\scriptsize,
+    linenos
+}
+
 \titlegraphic{
     \includegraphics[scale=0.15]{vertical_extenso_PB_fundo_claro}
 }
 
-%\logo{
-%    \begin{tikzpicture}[overlay,remember picture]
-%        \node[right=0.1cm] at (current page.west){
-%            \includegraphics[scale=0.015]{logo-ufsc-dark}
-%        };
-%    \end{tikzpicture}
-%}
-
-
-
-%\defbeamertemplate*{footline}{mytheme}{%
-%        \begin{beamercolorbox}[wd=1cm,ht=.5cm,center]{title in head/foot}%
-%            \includegraphics[scale=0.01]{logo-ufsc-dark}
-%            {\usebeamercolor{title in head/foot}\insertshortauthor}\makebox[2em][r]{{\usebeamerfont{title in head/foot}{\insertframenumber}}}
-%        \end{beamercolorbox}%
-%}
-
-%\defbeamertemplate*{footline}{mytheme}{
-%\begin{beamercolorbox}[wd=.5\paperwidth,ht=2.5exm]{}
-%    \includegraphics[scale=0.1]{logo-ufsc-dark}
-%\end{beamercolorbox}
-%}
 \setbeamertemplate{title page}[default][rounded=true]
 \setbeamertemplate{footline}{
     \leavevmode%
@@ -337,6 +324,53 @@
         \]
     \end{frame}
 
+    \begin{frame}{Ket vs Qiskit}
+        \begin{table}
+            \begin{tabular}{c | c}
+                Ket                         &   Qiskit                  \\
+                \hline \hline
+                \pause
+                $\ket{q_0 \dots q_n}$       &   $\ket{q_n \dots q_0}$   \\
+                \pause
+                \mintinline{python}{H(qubits)}      &   \mintinline{python}{qc.h(qubits)}\\
+                \pause
+                \mintinline{python}{ctrl()}         &   \mintinline{python}{qc.mcx()}
+            \end{tabular}
+            \label{tab:table}
+        \end{table}
+    \end{frame}
+
+    \begin{frame}{Ket vs Qiskit: Código}
+        \only<1>{
+        \inputminted[
+            bgcolor=lightgray,
+            firstline=13,
+            lastline=16
+        ]{python}{src/grover/grover_ket.py}
+        }
+        \only<2>{
+        \inputminted[
+            bgcolor=lightgray,
+            firstline=9,
+            lastline=26
+        ]{python}{src/grover/grover.py}
+        }
+        \only<3>{
+        \inputminted[
+            bgcolor=lightgray,
+            firstline=19,
+            lastline=26
+        ]{python}{src/grover/grover_ket.py}
+        }
+        \only<4>{
+        \inputminted[
+            bgcolor=lightgray,
+            firstline=29,
+            lastline=41
+        ]{python}{src/grover/grover.py}
+        }
+    \end{frame}
+
     \begin{frame}{Parâmetros dos Testes}
         \begin{itemize}
             \item 100 replicações.
@@ -344,7 +378,6 @@
             \item 1 estado aleatório marcado.
         \end{itemize}
     \end{frame}
-
 
     \begin{frame}{Tempo de Execução}
         \begin{figure}
