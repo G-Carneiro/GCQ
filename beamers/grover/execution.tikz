@@ -1,0 +1,15 @@
+\begin{tikzpicture}
+    \begin{axis}[
+        xmin=2,
+        ymin=0,
+        ymax=10,
+        xlabel={Nº Qubits},
+        ylabel={Tempo (s)},
+        legend pos=north west,
+        legend entries={qubox-pbw, ket-local, qubox-pbwd, qiskit-aer}]
+        \addplot[DarkBlue, mark=diamond*] table [x=qubits, y=average] {dat/ket_qubox_01.dat};
+        \addplot[DarkRed, mark=*] table [x=qubits, y=average] {dat/ket_local_01.dat};
+        \addplot[DarkGreen, mark=square*] table [x=qubits, y=average] {dat/ket_qubox_pbwd_01.dat};
+        \addplot[Purple, mark=triangle*] table [x=qubits, y=average] {dat/qiskit_aer_01.dat};
+    \end{axis}
+\end{tikzpicture}
