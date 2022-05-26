@@ -2,13 +2,11 @@ from typing import Union, Tuple, List
 
 from qiskit import QuantumCircuit, QuantumRegister
 
-qubox_token: str = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJRQ0" \
-                   "xhYnMgU2VydmVyIChRQ0xhYnMpIiwic3ViIjoiUUNMYWJzIFNlc" \
-                   "nZlciBVU0VSIHRva2VuIiwiYXVkIjoidXNlciIsImV4cCI6MTY1" \
-                   "MzQ4NTIwMiwibmJmIjoxNjQ1NzA5MjAyLCJpYXQiOjE2NDU3MDk" \
-                   "yMDIsIm5hbWUiOiJHYWJyaWVsIE1lZGVpcm9zIExvcGVzIENhcm" \
-                   "5laXJvIiwiZW1haWwiOiJnYWJyaWVsLm1sY0BncmFkLnVmc2MuY" \
-                   "nIifQ.EaBR1X4aPt4mbVWtJs7rgq1Z-CjBYdX0t76Ac-FxDTA"
+qubox_token: str = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJRdWFudHVsb29wIFNlcnZlciAo" \
+                   "UUNMYWJzKSIsInN1YiI6IlF1YW50dWxvb3AgU2VydmVyIFVTRVIgdG9rZW4iLCJhdWQiOiJ1c" \
+                   "2VyIiwiZXhwIjoxNjg0NjI2MDAwLCJuYmYiOjE2NTM1MjIwMDAsImlhdCI6MTY1MzUyMjAwMC" \
+                   "wibmFtZSI6IkdhYnJpZWwgTWVkZWlyb3MgTG9wZXMgQ2FybmVpcm8iLCJlbWFpbCI6ImdhYnJ" \
+                   "pZWwubWxjQGdyYWQudWZzYy5iciJ9.-boMNQgVIOogC1qVGHHBSbLHNo8XX1nSxcH5LWQ-Er8"
 
 ibmq_token: str = "98e8a2739b6f1ef5e4855f3eb754f84ee240e8cd5370de304cf" \
                   "fa2f527f47fbe3a398efd986329d655f70a18d3607767474efc" \

@@ -5,7 +5,7 @@
 \documentclass[
     12pt,
     xcolor={svgnames},
-    notes
+%    notes
 ]{beamer}
 
 % Packages
@@ -25,6 +25,7 @@
 %\setbeamercolor{frametitle}{bg=darkgray}
 \setbeamercolor{footline}{bg=darkgray}
 \setbeamertemplate{enumerate items}[default]
+\setbeamertemplate{itemize item}[circle]
 %\setbeamercolor{titlelike}{fg=white}
 %\usefonttheme{structuresmallcapsserif}
 \usefonttheme{serif}
@@ -40,7 +41,7 @@
 }
 
 \titlegraphic{
-    \includegraphics[scale=0.15]{vertical_extenso_PB_fundo_claro}
+    \includegraphics[scale=0.15]{../images/logos/vertical_sigla_PB_fundo_claro}
 }
 
 \setbeamertemplate{title page}[default][rounded=true]
@@ -48,7 +49,7 @@
     \leavevmode%
     \hbox{%
         \begin{beamercolorbox}[wd=0.7\paperwidth,ht=2.25ex,dp=1ex,leftskip=1em]{footline}%
-            \includegraphics[scale=0.05]{vertical_sigla_PB_fundo_claro}\hspace*{1em}%
+            \includegraphics[scale=0.05]{../images/logos/vertical_sigla_PB_fundo_claro}\hspace*{1em}%
             \usebeamerfont{author in head/foot}\insertshortauthor
         \end{beamercolorbox}%
 %        \begin{beamercolorbox}[wd=.3\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
@@ -72,18 +73,18 @@
         ymin=0.9,
         xlabel={Nº Qubits},
         ylabel={Precisão},
-        legend entries={qubox, local, qubox-pbwd, qiskit-aer},
+        legend entries={qubox-pbw, ket-local, qubox-pbwd, qiskit-aer},
         enlargelimits=0.15,
         legend style={at={(0.5,-0.2)},anchor=north,legend columns=-1}
     ]
-        \addplot table [x=qubits, y=precision] {dat/grover/ket_qubox_01.dat};
-        \addplot table [x=qubits, y=precision] {dat/grover/ket_local_01.dat};
-        \addplot table [x=qubits, y=precision] {dat/grover/ket_qubox_pbwd_01.dat};
-        \addplot table [x=qubits, y=precision] {dat/grover/qiskit_aer_01.dat};
+        \addplot[fill=DarkBlue] table [x=qubits, y=precision] {dat/ket_qubox_01.dat};
+        \addplot[fill=DarkRed] table [x=qubits, y=precision] {dat/ket_local_01.dat};
+        \addplot[fill=DarkGreen] table [x=qubits, y=precision] {dat/ket_qubox_pbwd_01.dat};
+        \addplot[fill=Purple] table [x=qubits, y=precision] {dat/qiskit_aer_01.dat};
     \end{axis}
 \end{tikzpicture}
 }
-\setbeameroption{show notes on second screen}
+%\setbeameroption{show notes on second screen}
 %\setbeameroption{second mode text on second screen}
 \begin{document}
     \begin{frame}[plain]
@@ -122,7 +123,7 @@
         \[
         \begin{matrix}
             \mathbb{B}_n: \text{conjunto de todas as palavras de n bits}. \\
-            \mathbb{M}: \text{conjunto de todos itens desejados}. \\
+%            \mathbb{M}: \text{conjunto de todos itens desejados}. \\
             N = 2^n
             \begin{cases}
                 n: \text{número de qubits}. \\
@@ -160,7 +161,7 @@
 
         \column{0.5\textwidth}
         \begin{figure}
-            \includesvg[scale=0.7]{figures/oracle_application}
+            \includesvg[scale=0.7]{../images/figures/oracle_application}
             \caption{Oráculo equivale a uma reflexão em relação ao eixo $\ket{\alpha}$.}
             \label{fig:oracle}
         \end{figure}
@@ -352,28 +353,28 @@
             bgcolor=lightgray,
             firstline=13,
             lastline=16
-        ]{python}{src/grover/grover_ket.py}
+        ]{python}{../../src/grover/grover_ket.py}
         }
         \only<2>{
         \inputminted[
             bgcolor=lightgray,
             firstline=9,
             lastline=26
-        ]{python}{src/grover/grover.py}
+        ]{python}{../../src/grover/grover.py}
         }
         \only<3>{
         \inputminted[
             bgcolor=lightgray,
             firstline=19,
             lastline=26
-        ]{python}{src/grover/grover_ket.py}
+        ]{python}{../../src/grover/grover_ket.py}
         }
         \only<4>{
         \inputminted[
             bgcolor=lightgray,
             firstline=29,
             lastline=41
-        ]{python}{src/grover/grover.py}
+        ]{python}{../../src/grover/grover.py}
         }
     \end{frame}
 
@@ -407,6 +408,14 @@
             \precision{14}{17}
             }
             \label{fig:precision}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}{Qiskit: Exemplo}
+        \begin{figure}
+            \centering
+            \includegraphics[scale=0.3]{../images/figures/grover_circuit_3qubits}
+            \label{fig:qiskit}
         \end{figure}
     \end{frame}
 \end{document}

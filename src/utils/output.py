@@ -35,6 +35,6 @@ for num_qubits in range(2, 20):
     new_entry = (num_qubits, num_states, replications, average_total_time, precision)
     table.append(new_entry)
 
-with open("../../dat/grover/qiskit_aer_01.dat", "w") as file:
+with open("../../beamers/grover/dat/qiskit_aer_01.dat", "w") as file:
     file.write(tabulate(table, headers=["qubits", "states", "replications", "average", "precision"],
                         tablefmt="plain", numalign="left"))
