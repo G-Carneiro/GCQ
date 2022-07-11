@@ -74,8 +74,8 @@ Representação de Produto
 
 .. math::
 
-    & e^{2πi·0.75} & \\
-    e^{1.5πi} &=& \left( e^{2πi} \right)^{0.75} \\
-    \left( e^{πi} \right)^{3/2} &=& \left( e^{2πi} \right)^{3/4} \\
+    e^{2πi3/4} &=& e^{2πi3/4} &=& e^{2πi3/4} \\
+    e^{πi3/2} &=& \left( e^{2πi} \right)^{3/4} &=& \cos(3\pi/2) + i \sin(3\pi/2) \\
+    \left( e^{πi} \right)^{3/2} &=& \left( (e^{πi})^2 \right)^{3/4} \\
     \sqrt{-1^3} &=& \sqrt[4]{1^3} \\
     i &≠& 1 \\
