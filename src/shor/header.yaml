@@ -2,4 +2,7 @@
 title: Algoritmo de Shor
 header-includes: |
   \usepackage{physics}
+  \usepackage{xcolor}
+#  \pagecolor{darkgray}
+#  \color{white}
 ---
