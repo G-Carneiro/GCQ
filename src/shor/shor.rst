@@ -69,24 +69,25 @@ Representação de Produto
     &=& \dfrac{1}{\sqrt{4}} \left( \ket{0} - \ket{1} \right) \left( \ket{0} - i\ket{1} \right) \\
     &=& \dfrac{1}{\sqrt{4}} \left( \ket{00} - i\ket{01} - \ket{10} + i\ket{11} \right) \\
 
-
-**Dúvida**
-
-.. math::
-
-    && e^{πi} = -1 \\ \\
-    e^{2πi3/4}  &=& e^{2πi3/4}  &=& e^{2πi3/4} \\
-    e^{πi3/2}   &=& e^{πi3/2}   &=& \left( e^{2πi} \right)^{3/4} \\
-    ( e^{πi} )^{3/2} &=& ( e^{πi} )^{3/2} &=& ( (e^{πi})^2 )^{3/4} \\
-    (-1)^{3/2} &=& (-1)^{3/2} &=& ( (-1)^2 )^{3/4} \\
-    \left(\sqrt{-1}\right)^3 &=& \sqrt{(-1)^3} &=& \sqrt[4]{1^3} \\
-    -i &≠& i &≠& 1 \\
+Equivalência
+------------
 
 .. math::
 
-    e^{πi3/2} &=& (e^{πi})^{3/2} \\
-    &=& (-1)^{3/2} \\
-    &=& \sqrt{(-1)^3} \\
-    &=& \sqrt{(-1)^2 · (-1)} \\
-    &=& -\sqrt{-1} \\
-    &=& -i
+    \begin{array}{lll}
+    \ket{j} &→& \displaystyle\dfrac{1}{2^{n/2}} \sum_{k=0}^{2^n-1} e^{2πijk/2^n} \ket{k} \\ \\
+    &=& \displaystyle\dfrac{1}{2^{n/2}} \sum_{k_1=0}^{1} \dots \sum_{k_n=0}^{1} e^{2πij \left( \sum_{l=1}^{n}k_l2^{-l} \right)} \ket{k_1 \dots k_n} \\ \\
+    &=& \displaystyle\dfrac{1}{2^{n/2}} \sum_{k_1=0}^{1} \dots \sum_{k_n=0}^{1} \bigotimes_{l=1}^{n} e^{2πij k_l 2^{-l}} \ket{k_l} \\ \\
+    &=& \displaystyle\dfrac{1}{2^{n/2}} \bigotimes_{l=1}^{n} \left[ \sum_{k_l=0}^{1} e^{2πij k_l 2^{-l}} \ket{k_l} \right] \\ \\
+    &=& \displaystyle\dfrac{1}{2^{n/2}} \bigotimes_{l=1}^{n} \left[ \ket{0} e^{2πij 2^{-l}} \ket{1} \right] \\ \\
+    &=& \dfrac{\left( \ket{0} + e^{2πi 0.j_n} \ket{1} \right) \left( \ket{0} + e^{2πi 0.j_{n-1}j_n} \ket{1} \right) \dots \left( \ket{0} + e^{2πi 0.j_1 j_2 \dots j_n} \ket{1} \right)}{2^{n/2}}
+    \end{array}
+
+**Provando notação**
+
+.. math::
+
+    \dfrac{k}{2^n} &=& \sum_{l=1}^{n} \dfrac{k_l}{2^l} \\
+    &=& \dfrac{k_1}{2^1} + \dfrac{k_2}{2^2} + \dots + \dfrac{k_n}{2^n} \\
+    &=& \dfrac{k_1·2^{n-1}}{2^n} + \dfrac{k_2·2^{n-2}}{2^n} + \dots + \dfrac{k_n}{2^n} \\
+    &=& \dfrac{1}{2^n} \left( k_1·2^{n-1} + k_2·2^{n-2} + \dots + k_n \right)
