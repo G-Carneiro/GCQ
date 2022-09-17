@@ -1,0 +1,63 @@
+\section{Estimativa de Fase}\label{sec:estimativa-de-fase}
+
+A estimativa de fase é a chave principal para vários algoritmos
+quânticos, como a busca de ordem e a fatoração.
+Suponha o operador unitário \(U\) tenha autovetor \(\ket{u}\) com autovalor
+\(e^{2\pi i \varphi}\), onde \(\varphi\) é desconhecido e descobri-lo é
+o objetivo.
+
+Para isso são necessários dois conjuntos de qubits.
+O primeiro possui \(t\) qubits no estado \(\ket{0}\), onde \(t\) depende da precisão
+desejada na estimativa e da probabilidade desejada da estimativa estar
+correta.
+Já o segundo, inicia no estado \(\ket{u}\) e possui a quantidade de qubits necessária para representar tal estado.
+
+\[
+    t = n + \left\lceil \log \left( 2 + \dfrac{1}{2\varepsilon}\right) \right\rceil
+\]
+
+Para se obter \(\varphi\) com uma precisão de \(n\) bits e probabilidade
+de sucesso de pelo menos \(1 - \varepsilon\), precisa-se de
+
+Existem três estágios durante a estimativa.
+Primeiramente a porta de Hadamard é aplicada no primeiro conjunto e na sequência operações
+\(U\)-controladas são aplicadas no segundo conjunto, com \(U\) elevada a
+sucessivas potências de dois, conforme a \autoref{fig:primeiro-estagio}.
+
+\begin{figure}[!htb]
+    \centering
+    \includesvg[width=0.75\textwidth,height=\textheight]{utils/algoritmos/phase_estimation/phase_estimation.svg}
+    \caption{Primeiro estágio.}
+    \label{fig:primeiro-estagio}
+\end{figure}
+
+Com isso, o estado final do primeiro conjunto é
+
+\[
+    \dfrac{1}{\sqrt{2^t}} (\ket{0} + e^{2\pi i 2^{t-1}\varphi} \ket{1}) (\ket{0} + e^{2\pi i 2^{t-2}\varphi} \ket{1}) \dots (\ket{0} + e^{2\pi i 2^{0}\varphi} \ket{1}) = \dfrac{1}{\sqrt{2^t}} \sum_{k=0}^{2^t - 1} e^{2\pi i \varphi k} \ket{k}
+\]
+
+Agora, suponha que com exatamente \(t\) bits seja possível representar
+\(\varphi\) como \(0.\varphi_1 \dots \varphi_t\).
+Então o estado resultante pode ser reescrito como
+
+\[
+    \dfrac{1}{\sqrt{2^t}} (\ket{0} + e^{2\pi i 0.\varphi_t} \ket{1}) (\ket{0} + e^{2\pi i 0.\varphi_{t-1}\varphi_t} \ket{1}) \dots (\ket{0} + e^{2\pi i 0.\varphi_1 \dots \varphi_t} \ket{1})
+\]
+
+No segundo estágio, a transformada de Fourier Quântica inversa é
+aplicada no primeiro conjunto de qubits.
+Com isso, tem-se o estado \(\ket{\varphi_1 \dots \varphi_t}\), o que resulta exatamente em
+\(\varphi\).
+
+Por fim, no terceiro estágio, é feita a leitura do primeiro conjunto de
+qubits para se obter a fase \(\varphi\).
+
+A estimativa de fase pode ser representada de forma geral pela \autoref{fig:circuito-completo}.
+
+\begin{figure}[!htb]
+    \centering
+    \includesvg[width=0.75\textwidth,height=\textheight]{utils/algoritmos/phase_estimation/phase_estimation_full.svg}
+    \caption{Circuito completo.}
+    \label{fig:circuito-completo}
+\end{figure}
