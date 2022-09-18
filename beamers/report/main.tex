@@ -1,0 +1,151 @@
+%! Author = gabriel
+%! Date = 9/17/22
+
+% Preamble
+\documentclass[
+    12pt,
+    xcolor={svgnames},
+%    notes
+]{beamer}
+
+% Packages
+\usepackage{amsmath}
+\usepackage{pgfplots}
+\usepackage{minted}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}                        % Pacote de fontes
+\usepackage[brazil]{babel}                      % Tradução para português (pt-br)
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{braket}
+\usepackage{svg}
+\usepackage{pgfpages}
+
+\usetheme{Madrid}
+\usecolortheme[named=darkgray]{structure}
+\setbeamercolor{background canvas}{bg=gray}
+%\setbeamercolor{frametitle}{bg=darkgray}
+\setbeamercolor{footline}{bg=darkgray}
+\setbeamertemplate{enumerate items}[default]
+\setbeamertemplate{itemize item}[circle]
+\setbeamertemplate{itemize subitem}[circle]
+%\setbeamercolor{titlelike}{fg=white}
+%\usefonttheme{structuresmallcapsserif}
+\usefonttheme{serif}
+\title{Qiskit: aprendendo a programar computadores quânticos}
+\author{\href{https://github.com/G-Carneiro}{Gabriel Carneiro \\
+Orientador: Eduardo Inácio Duzzioni}}
+%\institute[UFSC]{Universidade Federal de Santa Catarina}
+\date{10 de setembro de 2022}
+
+\setminted[python]{
+    breaklines,
+    fontsize=\scriptsize,
+    linenos
+}
+
+\titlegraphic{
+    \includegraphics[scale=0.15]{../images/logos/vertical_sigla_PB_fundo_claro}
+}
+
+\setbeamertemplate{title page}[default][rounded=true]
+\setbeamertemplate{footline}{
+    \leavevmode%
+    \hbox{%
+        \begin{beamercolorbox}[wd=0.7\paperwidth,ht=2.25ex,dp=1ex,leftskip=1em]{footline}%
+            \includegraphics[scale=0.05]{../images/logos/vertical_sigla_PB_fundo_claro}\hspace*{1em}%
+            \usebeamerfont{author in head/foot}\href{https://github.com/G-Carneiro}{Gabriel Carneiro}
+        \end{beamercolorbox}%
+%        \begin{beamercolorbox}[wd=.3\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+%            \usebeamerfont{title in head/foot}\insertshorttitle
+%        \end{beamercolorbox}%
+        \begin{beamercolorbox}[wd=.3\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+%            \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+            \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+        \end{beamercolorbox}}%
+    \vskip0pt%
+}
+
+% Document
+\begin{document}
+    \begin{frame}[plain]
+        \titlepage
+    \end{frame}
+
+    \begin{frame}{Motivação}
+        \begin{itemize}
+            \item Crescimento
+            \item Eficiência
+            \item Mercado
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Computação Quântica}
+        \begin{columns}
+            \begin{column}{0.5\textwidth}
+            \begin{itemize}
+                \item Revisão de Algebra Linear
+                \item Circuito Quântico
+                    \begin{itemize}
+                        \item Qubit
+                        \item Portas
+                        \item Superposição
+                        \item Emaranhamento
+                    \end{itemize}
+                \item Qiskit
+                \item Ket
+                    \begin{itemize}
+                        \item QuBOX
+                    \end{itemize}
+            \end{itemize}
+            \end{column}
+            \begin{column}{0.5\textwidth}
+                \begin{figure}
+                    \includegraphics[scale=0.2]{../images/figures/qubox}
+                    \caption{Retirado de https://qubox.ufsc.br}
+                    \label{fig:qubox}
+                \end{figure}
+            \end{column}
+        \end{columns}
+    \end{frame}
+
+    \begin{frame}{Algoritmos}
+        \begin{itemize}
+            \item Busca de Grover
+            \item Transformada de Fourier Quântica
+            \item Estimativa de Fase
+            \item Busca de Ordem
+            \item Fatoração de Shor
+        \end{itemize}
+    \end{frame}
+
+    \begin{frame}{Grover - Tempo de Execução}
+        \begin{figure}
+        \label{fig:figure}
+        \centering
+        \begin{tikzpicture}
+            \begin{axis}[
+                xmin=2,
+                ymin=0,
+                ymax=10,
+                xlabel={Nº Qubits},
+                ylabel={Tempo (s)},
+                legend pos=north west,
+                legend entries={qubox-pbw, ket-local, qubox-pbwd, qiskit-aer}]
+                \addplot[DarkBlue, mark=diamond*] table [x=qubits, y=average] {../grover/dat/ket_qubox_01.dat};
+                \addplot[DarkRed, mark=*] table [x=qubits, y=average] {../grover/dat/ket_local_01.dat};
+                \addplot[DarkGreen, mark=square*] table [x=qubits, y=average] {../grover/dat/ket_qubox_pbwd_01.dat};
+                \addplot[Purple, mark=triangle*] table [x=qubits, y=average] {../grover/dat/qiskit_aer_01.dat};
+            \end{axis}
+        \end{tikzpicture}
+        \end{figure}
+    \end{frame}
+
+    \begin{frame}{Conclusão}
+        \begin{itemize}
+            \item Área recente
+            \item Preparação
+            \item Trabalhos futuros
+        \end{itemize}
+    \end{frame}
+\end{document}
