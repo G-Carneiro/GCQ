@@ -1,0 +1,69 @@
+\section{Fatoração}\label{sec:fatoracao}
+
+O problema de fatoração tem grande importância na computação, sendo um
+dos pilares por trás da criptografia.
+Ele consiste em encontrar dois números que, quando multiplicados, resultem \(N\).
+Tal problema é equivalente ao problema da busca de ordem, ou seja, é possível utilizar
+o algoritmo que resolve a busca de ordem, com as devidas adaptações,
+para se fatorar um número.
+Para isso, a redução da fatoração para a busca de ordem é feita em duas partes, ambas podendo ser expressas por teoremas.
+
+Na primeira etapa é preciso mostrar que se pode computar um fator de
+\(N\) se for possível encontrar uma solução não-trivial
+\(x \neq \pm 1 \pmod N\) para a equação \(x^2 = 1 \pmod N\).
+
+\newtheorem{theorem}{Teorema}
+\begin{theorem}
+Seja \(N\) um número composto de \(L\) bits, e \(x\) uma solução
+não-trivial da equação \(x^2 = 1 \pmod N\) na faixa \(1 \le x \le N\),
+isto é, excluídos \(x = 1 \pmod N\) e \(x = N - 1 = -1 \pmod N\).
+Nessas condições, pelo menos um dentre \texttt{mdc}\((x - 1, N)\) e
+\texttt{mdc}\((x + 1, N)\) será um fator não-trivial de \(N\), que pode
+ser computado com \(O(L^3)\) operações.
+\end{theorem}
+
+Para a segunda, é necessário provar que um número \(y\) co-primo de
+\(N\) escolhido aleatoriamente terá, com grande probabilidade, uma ordem
+par tal que \(y^{r / 2} \neq \pm 1 \pmod N\), e portanto
+\(x \equiv y^{r / 2} \pmod N\) será uma solução não-trivial de
+\(x^2 = 1 \pmod N\).
+
+\begin{theorem}
+Seja \(N = p_1^{\alpha_1} \dots p_m^{\alpha_m}\) a decomposição em
+fatores primos de um número inteiro positivo ímpar.
+Seja \(x`um inteiro escolhido aleatoriamente no intervalo :math:`1 \le x \le N - 1\)
+que seja co-primo de \(N\).
+Nesse caso (\(p =\) probabilidade),
+
+\[
+  p(r \text{ seja par e } x^{r/2} \neq -1 \pmod N) \ge 1 - \dfrac{1}{2^{m-1}}
+\]
+\end{theorem}
+
+Juntos, os teoremas formam um algoritmo que retorna um fator não-trivial
+de \(N\), com alta probabilidade.
+
+\subsection{Pseudoalgoritmo}\label{subsec:pseudoalgoritmo}
+
+Todo algoritmo pode ser executado de forma eficiente por um computador
+clássico, com exceção da parte de busca de ordem.
+Segue um pseudoalgoritmo que retorna um fator não-trivial de \(N\)
+
+\begin{enumerate}
+\tightlist
+\item
+  Se \(N\) for par, retorne o fator 2.
+\item
+  Se \(N = a^b\), com \(a \ge 1\) e \(b \ge 2\), retorne o fator \(a\).
+\item
+  Dado um \(x\) aleatório no intervalo 1 até \(N - 1\).
+  Se \texttt{mdc}\((x, N) > 1\), retorne o fator \texttt{mdc}\((x, N)\).
+\item
+  Use a sub-rotina de busca de ordem para encontrar a ordem \(r\) de
+  \(x \mod N\).
+\item
+  Se \(r\) for par, e \(x^{x/2} \neq -1 \pmod N\), compute
+  \texttt{mdc}\((x^{r/2}-1, N)\) e \texttt{mdc}\((x^{r/2}+1, N)\).
+  Se um desses resultados é um fator não-trivial, retorne esse fator.
+  Caso contrário, o algoritmo falha.
+\end{enumerate}

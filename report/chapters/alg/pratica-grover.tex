@@ -1,0 +1,138 @@
+\subsection{Implementação}\label{subsec:implementacao}
+
+Com a teoria explicada, é possível implementar o algoritmo de Grover usando Ket.
+Aqui, cada estado da base computacional será representado na base decimal, \(\left| i \right\rangle, i = 0, \dots, 2^n - 1\).
+Logo, é necessário passar um inteiro maior ou igual a 0 que indicará qual desses estados será marcado, também será preciso especificar quantos bits serão simulados.
+
+Primeiro é preciso importar o necessário (\autoref{lst:import}).
+
+\begin{listing}[!htb]
+    \begin{minted}{python}
+    from math import sqrt, pi
+    from ket import *
+    \end{minted}
+    \caption{Importando bibliotecas.}
+    \label{lst:import}
+\end{listing}
+
+Para facilitar, o algoritmo vai ser dividido em quatro partes:
+
+\begin{enumerate}
+\tightlist
+\item
+  Oráculo de fase;
+\item
+  Difusor;
+\item
+  Operador de Grover;
+\item
+  Função principal \texttt{grover()}, a qual será chamada e realizará
+  todas as operações necessárias.
+\end{enumerate}
+
+\subsubsection{Oráculo de fase}\label{subsubsec:oraculo-de-fase2}
+
+\begin{listing}[!htb]
+    \begin{minted}{python}
+        def phase_oracle(qubits: quant, state: int):
+            with around(I if state&1 else X, qubits[-1]):
+                ctrl(qubits[:-1], Z, qubits[-1], on_state=state>>1)
+    \end{minted}
+    \caption{Oráculo de fase.}
+    \label{lst:oraculo}
+\end{listing}
+
+O que está sendo feito no \autoref{lst:oraculo} é receber os qubits e o estado desejado como argumentos e aplicando a porta \(Z\) controlada.
+Se os qubits estiverem no estado \texttt{state} a porta \texttt{Z} é aplicada
+no último qubit (\texttt{qubit{[}-1{]}}).
+Como essa operação controlada aplica a fase -1 apenas quando os qubits estão no estado \(\left|1\right>\), a porta \texttt{flipc} é usada para permutar o estado desejado (\texttt{state}) para o estado de controle (\(\left|1\cdots1\right>\)).
+Com o \texttt{with\ around} é garantido que a permutação será desfeita após a aplicação da porta controlada.
+
+\subsubsection{Difusor}\label{subsubsec:difusor2}
+
+O difusor (\autoref{lst:difusor}) é muito semelhante ao código do oráculo, porém nele a porta de hadamard é aplicada antes e depois da porta controlada, e o estado a ser marcado é \(\left| 0 \right\rangle\).
+
+\begin{listing}[!htb]
+    \begin{minted}{python}
+        def grover_diffuser(qubits: quant):
+            with around(H, qubits):
+                phase_oracle(qubits, 0)
+    \end{minted}
+    \caption{Difusor}
+    \label{lst:difusor}
+\end{listing}
+
+\subsubsection{Operador de Grover}\label{subsubsec:operador-de-grover}
+
+Agora partindo para o operador de Grover, tem-se o \autoref{lst:grover}, consistindo apenas da chamada do oráculo e depois do difusor.
+
+\begin{listing}[!htb]
+    \begin{minted}{python}
+        def grover_operator(qubits: quant, state: int):
+            phase_oracle(qubits, state)
+            grover_diffuser(qubits)
+    \end{minted}
+    \caption{Operador de Grover.}
+    \label{lst:grover}
+\end{listing}
+
+
+\subsubsection{Função Principal}\label{subsubsec:funcao-principal}
+
+Para finalizar, a função principal, a qual irá criar os qubits e definir quantas vezes será preciso aplicar o operador de Grover.
+
+\begin{listing}[!htb]
+    \begin{minted}{python}
+        def grover(state: int, num_qubits: int) -> int:
+            qubits = quant(num_qubits)
+            entries = 2**num_qubits
+            steps = int((pi / 4) * sqrt(entries))
+
+            H(qubits)
+
+            for _ in range(steps):
+                grover_operator(qubits, state)
+
+            return measure(qubits).value
+    \end{minted}
+    \caption{Função principal do algoritmo.}
+    \label{lst:principal}
+\end{listing}
+
+Após todas as operações, é feito a medida e retorna-se o valor obtido.
+Como se trata de um algoritmo probabilístico, nem sempre o estado desejado será o resultado, porém é esperado que tenha alta taxa de sucesso.
+Com tudo pronto pode-se chamar a função \texttt{grover()}.
+
+\subsubsection{Saída}\label{subsubsec:saida}
+
+O \autoref{lst:exemplo} foi criado para testar o funcionamento do algoritmo e se obteve a saída presente no \autoref{lst:saida}.
+
+\begin{listing}[!htb]
+    \begin{minted}{python}
+        from random import randrange
+        num_qubits = 10
+        for state in [randrange(2**num_qubits) for _ in range(10)]:
+            print('Procurando estado', state, '...', end=' ')
+            print('Estado medido:', grover(state, num_qubits))
+    \end{minted}
+    \caption{Função principal do algoritmo.}
+    \label{lst:exemplo}
+\end{listing}
+
+
+\begin{listing}[!htb]
+    \caption{Saída dos testes.}
+    \label{lst:saida}
+    \begin{minted}{python}
+        Procurando estado 882 ... Estado medido: 882
+        Procurando estado 1013 ... Estado medido: 1013
+        Procurando estado 557 ... Estado medido: 557
+        Procurando estado 490 ... Estado medido: 490
+        Procurando estado 163 ... Estado medido: 163
+        Procurando estado 429 ... Estado medido: 429
+        Procurando estado 300 ... Estado medido: 300
+        Procurando estado 184 ... Estado medido: 184
+        Procurando estado 394 ... Estado medido: 394
+        Procurando estado 763 ... Estado medido: 763
+    \end{minted}
+\end{listing}

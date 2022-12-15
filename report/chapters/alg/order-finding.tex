@@ -1,0 +1,52 @@
+\section{Busca de Ordem}\label{sec:busca-de-ordem}
+
+Seja \(x\) e \(N, x < N\), sem fatores comuns, a \textbf{ordem} de \(x\)
+módulo \(N\) é definida como o menor inteiro positivo \(r\) tal que
+\(x^r = 1 \pmod N\).
+Até o momento esse é um problema difícil de ser resolvido por um computador clássico usando recursos polinomiais nos \(O(L)\) bits necessários para especificar o problema, com \(L \equiv \lceil \log (N) \rceil\).
+
+A busca de ordem pode ser reduzida ao problema da estimativa de fase com
+algumas manipulações algébricas um tanto complexas\cite{nielsen_chuang_2010}.
+Mas consiste em aplicar o operador unitário \(U\) de forma que
+
+\[
+    U \ket{y} \equiv \ket{x y \pmod N}
+\]
+
+Para a redução ser possível, duas condições devem ser cumpridas.
+A primeira é que seja possível implementar uma operação
+\(U^{2^j}\)-controlada, para qualquer inteiro \(j\).
+Ela é satisfeita usando-se o procedimento conhecido como {exponenciação modular}.
+
+Já a segunda é a preparação de um auto-estado com autovalor não-trivial,
+o que requer saber o valor de \(r\).
+Felizmente, isso é resolvido com a estimativa de fase.
+
+\subsection{Exponenciação Modular}\label{subsec:exponenciacao-modular}
+
+Com algumas manipulações, é perceptível a equivalência entre a aplicação
+de portas \(U^{2^j}\)-controladas e o uso de {exponencial modular}, como
+segue:
+
+\[
+    \begin{array}{lll}
+        \ket{z}\ket{y} &\to& \ket{z} U^{z_t 2^{t-1}} \dots U^{z_1 2^0} \ket{y} \\
+        &=& \ket{z} \ket{x^{z_t 2^{t-1}} \times \dots \times x^{z_1 2^0} y \pmod N} \\
+        &=& \ket{z} \ket{x^z y \pmod N}
+    \end{array}
+\]
+
+E essa operação pode ser facilmente realizada com a técnica de
+computação reversível.
+
+\subsection{Circuito}\label{subsec:circuito}
+
+O circuito completo da busca de ordem é muito semelhante ao da
+estimativa de fase, como mostra a \autoref{fig:busca-ordem}.
+
+\begin{figure}[!htb]
+    \centering
+    \includesvg[width=0.75\textwidth,height=\textheight]{utils/algoritmos/order_finding/order_finding.svg}
+    \caption{Circuito da Busca de Ordem.}
+    \label{fig:busca-ordem}
+\end{figure}

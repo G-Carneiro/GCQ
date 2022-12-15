@@ -1,0 +1,120 @@
+\section{Transformada de Fourier Quântica}\label{sec:transformada-de-fourier-quantica}
+
+A transformada de Fourier quântica é elemento central na resolução de
+diversos algoritmos quânticos, como, por exemplo, a fatoração quântica e
+a estimativa de fase.
+Além disso, ela também possibilita um ganho exponencial.
+
+\subsection{Transformada Discreta (Clássica)}\label{subsec:transformada-discreta}
+
+Nessa notação a transformada recebe como entrada um vetor de números
+complexos, \(x_0, \dots, x_{N - 1}\), onde \(N\) é fixo.
+Como saída têm-se os dados transformados, ou seja, um vetor de números complexos,
+\(y_0, \dots, y_{N - 1}\), definidos por
+
+\[
+    y_k \equiv \dfrac{1}{\sqrt{N}} \sum_{j=0}^{N-1} x_j e^{2\pi i jk / N}
+\]
+
+\subsection{Transformada Quântica}\label{subsec:transformada-quantica}
+
+A transformada quântica é a mesma transformação, porém com uma notação diferente.
+
+\[
+    \ket{j} \to \dfrac{1}{\sqrt{N}} \sum_{k=0}^{N-1} e^{2 \pi  i jk /N} \ket{k}
+\]
+
+\textbf{Exemplos}
+
+\[
+    \begin{array}{ccl}
+        \ket{0} &\to& \dfrac{1}{\sqrt{2}} \left( e^{\pi i\cdot 0\cdot 0} \ket{0} + e^{\pi i\cdot 0\cdot 1} \ket{1}\right) \\
+        &=& \dfrac{1}{\sqrt{2}} \left( \ket{0} + \ket{1}\right) \\ \\
+        \ket{1} &\to& \dfrac{1}{\sqrt{2}} \left( e^{\pi i\cdot 1\cdot 0} \ket{0} + e^{\pi i\cdot 1\cdot 1} \ket{1}\right) \\
+        &=& \dfrac{1}{\sqrt{2}} \left( \ket{0} - \ket{1}\right) \\ \\
+        \ket{0 \dots 0} &\to& \dfrac{1}{\sqrt{N}} \left( \ket{0 \dots 0} +  \ket{0 \dots 1} + \dots + \ket{1 \dots 1}\right) \\
+        &=& \dfrac{1}{\sqrt{N}} \left( \ket{0 \dots 0} + \ket{0 \dots 1} + \dots + \ket{1 \dots 1} \right) \\ \\
+        \ket{1 \dots 1} &\to& \dfrac{1}{\sqrt{N}} \left( \ket{0 \dots 0} + e^{2\pi i(N-1)/N} \ket{0 \dots 1} + \dots + e^{2\pi i(N-1)(N-1)/N} \ket{1 \dots 1}\right) \\
+        &=& \dfrac{1}{\sqrt{N}} \left( \ket{0 \dots 0} + e^{2\pi i(N-1)/N} \ket{0 \dots 1} + \dots + e^{2\pi i(N^2-2N+1)/N} \ket{1 \dots 1} \right)
+    \end{array}
+\]
+
+\subsubsection{Estado Arbitrário}\label{subsubsec:estado-arbitrario}
+
+A notação anterior é aplicável para uma base ortonormal, em um estado
+arbitrário possui a seguinte ação
+
+\[
+    \sum_{j=0}^{N-1} x_j \ket{j} \to \sum_{k=0}^{N-1} y_k \ket{k} \\
+\]
+
+onde cada amplitude \(y_k\) é a transformada de Fourier discreta da
+amplitude \(x_j\).
+
+\subsubsection{Representação de Produto}\label{subsubsec:representacao-de-produto}
+
+A transformada de Fourier quântica pode ser reescrita de forma a usar
+cada qubit de forma direta na fórmula.
+Provavelmente essa é forma de representação mais útil da transformada, visto que a partir dela um
+circuito quântico pode ser facilmente construído.
+
+\[
+    \ket{j_1 \dots j_n} \to \dfrac{1}{\sqrt{2^n}} \left( \ket{0} + e^{2 \pi i 0.j_n}\ket{1} \right) \left( \ket{0} + e^{2 \pi i 0.j_{n-1}j_n}\ket{1} \right) \dots \left( \ket{0} + e^{2 \pi i 0.j_1 \dots j_n}\ket{1} \right)
+\]
+
+\textbf{Exemplos}
+
+\[
+    \begin{array}{ccl}
+        \ket{0} &\to& \dfrac{1}{\sqrt{2}} \left( \ket{0} + e^{2\pi i0.0_{\text{bin}}} \ket{1} \right) \\
+        &=& \dfrac{1}{\sqrt{2}} \left( \ket{0} + \ket{1} \right) \\ \\
+        \ket{1} &\to& \dfrac{1}{\sqrt{2}} \left( \ket{0} + e^{2\pi i0.1_{\text{bin}}} \ket{1} \right) \\
+        \ket{1} &\to& \dfrac{1}{\sqrt{2}} \left( \ket{0} + e^{2\pi i/2} \ket{1} \right) \\
+        &=& \dfrac{1}{\sqrt{2}} \left( \ket{0} - \ket{1} \right) \\ \\
+        \ket{00} &\to& \dfrac{1}{\sqrt{4}} \left( \ket{0} + e^{2\pi i0.0_{\text{bin}}} \ket{1} \right) \left( \ket{0} + e^{2\pi i0.00_{\text{bin}}} \ket{1} \right) \\
+        &=& \dfrac{1}{\sqrt{4}} \left( \ket{0} + \ket{1} \right) \left( \ket{0} + \ket{1} \right) \\
+        &=& \dfrac{1}{\sqrt{4}} \left( \ket{00} + \ket{01} + \ket{10} + \ket{11} \right) \\ \\
+        \ket{11} &\to& \dfrac{1}{\sqrt{4}} \left( \ket{0} + e^{2\pi i0.1_{\text{bin}}} \ket{1} \right) \left( \ket{0} + e^{2\pi i0.11_{\text{bin}}} \ket{1} \right) \\
+        &=& \dfrac{1}{\sqrt{4}} \left( \ket{0} + e^{2\pi i/2} \ket{1} \right) \left( \ket{0} + e^{2\pi i\cdot 0.75} \ket{1} \right) \\
+        &=& \dfrac{1}{\sqrt{4}} \left( \ket{0} - \ket{1} \right) \left( \ket{0} - i\ket{1} \right) \\
+        &=& \dfrac{1}{\sqrt{4}} \left( \ket{00} - i\ket{01} - \ket{10} + i\ket{11} \right)
+    \end{array}
+\]
+
+\subsubsection{Circuito}\label{subsubsec:circuito}
+
+O circuito, \autoref{fig:qft}, a seguir foi feito a partir da representação de produto,
+porém é necessário aplicar portas \textit{swap} ao final caso se deseje o
+resultado exatamente nos mesmos qubits.
+
+\begin{figure}[!htb]
+    \centering
+    \includesvg[width=\textwidth,height=\textheight]{utils/algoritmos/qft/qft.svg}
+    \caption{Circuito da Transformada de Fourier Quântica.}
+    \label{fig:qft}
+\end{figure}
+
+onde
+
+\[
+    R_k \equiv
+    \begin{bmatrix}
+        1 & 0 \\
+        0 & e^{2\pi i / 2^k}
+    \end{bmatrix}
+\]
+
+\subsubsection{Equivalência}\label{subsubsec:equivalencia}
+
+Agora, para provar a equivalência entre as representações, é necessário fazer algumas manipulações algébricas na definição e chegar na representação de produto.
+
+\[
+    \begin{array}{lll}
+        \ket{j} &\to& \displaystyle\dfrac{1}{2^{n/2}} \sum_{k=0}^{2^n-1} e^{2\pi ijk/2^n} \ket{k} \\ \\
+        &=& \displaystyle\dfrac{1}{2^{n/2}} \sum_{k_1=0}^{1} \dots \sum_{k_n=0}^{1} e^{2\pi ij \left( \sum_{l=1}^{n}k_l 2^{-l} \right)} \ket{k_1 \dots k_n} \\ \\
+        &=& \displaystyle\dfrac{1}{2^{n/2}} \sum_{k_1=0}^{1} \dots \sum_{k_n=0}^{1} \bigotimes_{l=1}^{n} e^{2\pi ij k_l 2^{-l}} \ket{k_l} \\ \\
+        &=& \displaystyle\dfrac{1}{2^{n/2}} \bigotimes_{l=1}^{n} \left[ \sum_{k_l=0}^{1} e^{2\pi ij k_l 2^{-l}} \ket{k_l} \right] \\ \\
+        &=& \displaystyle\dfrac{1}{2^{n/2}} \bigotimes_{l=1}^{n} \left[ \ket{0} + e^{2\pi ij 2^{-l}} \ket{1} \right] \\ \\
+        &=& \dfrac{\left( \ket{0} + e^{2\pi i 0.j_n} \ket{1} \right) \left( \ket{0} + e^{2\pi i 0.j_{n-1}j_n} \ket{1} \right) \dots \left( \ket{0} + e^{2\pi i 0.j_1 j_2 \dots j_n} \ket{1} \right)}{2^{n/2}}
+    \end{array}
+\]

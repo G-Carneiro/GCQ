@@ -1,0 +1,218 @@
+\section{Algoritmo de Busca de Grover}\label{sec:algoritmo-de-busca-de-grover}
+
+Aqui será abordado como implementar o algoritmo quântico de Grover para
+resolver o problema da busca em base de dados desordenada, o qual é mais
+eficiente que as soluções clássicas.
+
+\subsection{Problema}\label{subsec:problema}
+
+O problema pode ser resumido em encontrar um determinado elemento dado
+uma lista desordenada de tamanho \(2^n\).
+Para isso, deve ser criada uma função booleana \(f: \{0, 1\}^n \to \{0, 1\}\), a qual só sinalize `1'
+para o elemento desejado.
+
+\[\begin{aligned}
+f(x) =  \begin{cases}
+            0, x \ne x_0 \\
+            1, x = x_0
+        \end{cases}
+\end{aligned}\]
+
+\textbf{Observação}
+
+Cada elemento da lista será codificado em um estado da base
+computacional \(\left| i \right\rangle, i = \{0, \dots, 2^n - 1\}\).
+
+\subsection{Oráculo}\label{subsec:oraculo}
+
+Um oráculo faz o mesmo que a função booleana descrita anteriormente.
+Existem dois tipos de oráculos, XOR e os de fase, nesse problema será
+utilizado o de fase.
+
+\subsubsection{Oráculo de Fase}\label{subsubsec:oraculo-de-fase}
+
+O oráculo de fase introduzirá uma fase de \(\pi\), ou seja, multiplicará
+por \(-1\).
+
+\begin{itemize}
+\tightlist
+\item
+  Exemplo: dado
+  \(\left| \psi \right\rangle = \dfrac{1}{\sqrt{2}}\left( \left| 0 \right\rangle + \left| 1 \right\rangle\right)\).
+  Se o oráculo for usado para marcar o estado
+  \(\left| 1 \right\rangle\), o resultado será
+  \(O(\left| \psi \right\rangle) = \dfrac{1}{\sqrt{2}}\left( \left| 0 \right\rangle - \left| 1 \right\rangle\right)\).
+\end{itemize}
+
+\subsection{Algoritmo}\label{subsec:algoritmo}
+
+O primeiro passo consiste em aplicar a porta de Hadamard em todos os
+qubits para se conseguir uma superposição com pesos iguais.
+
+\[H^{\otimes n}\left|0\right\rangle^{\otimes n}.\]
+
+Após isso é preciso aplicar \(G\) (operador de Grover) \(k\) vezes, em que \(G\)
+representa a seguinte sequência de passos:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\item
+  Aplicar o oráculo de fase para o estado desejado;
+\item
+  Aplicar a porta de Hadamard em todos os qubits;
+\item
+  Aplicar o operador \(2 \left| 0 \right\rangle \left\langle 0 \right| - I\);
+  Na notação utilizada aqui \(\left| 0 \right\rangle\) representa \(\left| 0 \right\rangle^{\otimes n}\).
+\item
+  Aplicar a porta de Hadamard em todos os qubits.
+\end{enumerate}
+
+\subsubsection{Notação Auxiliar}\label{subsubsec:notacao-auxiliar}
+
+\[\begin{aligned}
+\begin{matrix}
+\mathbb{B}_n: \text{conjunto de todas as palavras de n bits}. \\
+\mathbb{M}: \text{conjunto de todos itens desejados}. \\
+N = 2^n
+\begin{cases}
+n: \text{número de qubits}. \\
+N: \text{número de itens}.
+\end{cases} \\
+M: \text{número de itens desejados (usaremos } M = 1). \\
+\left| \alpha \right\rangle \coloneqq \displaystyle \sum_{\substack{x \in \mathbb{B}_n \\ f(x) = 0}} \frac{\left| x \right\rangle}{\sqrt{N - M}} \\
+\left| \beta \right\rangle \coloneqq \displaystyle\sum_{\substack{x \in \mathbb{B}_n \\ f(x) = 1}} \dfrac{\left| x \right\rangle}{\sqrt{M}} : \text{itens desejados}. \\
+S \coloneqq \text{span}_\mathbb{R}\{\left| \alpha \right\rangle, \left| \beta \right\rangle \} : \text{espaço vetorial gerado por } \left| \alpha \right\rangle \text{ e } \left| \beta \right\rangle.
+\end{matrix}
+\end{aligned}\]
+
+\subsubsection{Difusor}\label{subsubsec:difusor}
+
+\[\begin{aligned}
+\begin{matrix}
+2 \left| 0 \right\rangle \left\langle 0 \right| - I &=& 2 \cdot
+\begin{bmatrix}
+1       \\
+0       \\
+\vdots  \\
+0
+\end{bmatrix}_{n \times 1}
+\begin{bmatrix}
+1 & 0 & \cdots & 0
+\end{bmatrix}_{1 \times n} -
+\begin{bmatrix}
+1 & 0 & \cdots & 0 \\
+0 & 1 & \cdots & 0 \\
+\vdots & \vdots & \ddots & 0 \\
+0 & 0 & \cdots & 1
+\end{bmatrix}_{n \times n}
+\\
+&=&
+\begin{bmatrix}
+2 & 0 & \cdots & 0 \\
+0 & 0 & \cdots & 0 \\
+\vdots & \vdots & \ddots & 0 \\
+0 & 0 & \cdots & 0
+\end{bmatrix}_{n \times n} -
+\begin{bmatrix}
+1 & 0 & \cdots & 0 \\
+0 & 1 & \cdots & 0 \\
+\vdots & \vdots & \ddots & 0 \\
+0 & 0 & \cdots & 1
+\end{bmatrix}_{n \times n}
+\\
+&=&
+\begin{bmatrix}
+1 & 0 & \cdots & 0\\
+0 & -1 & \cdots & 0 \\
+\vdots & \vdots & \ddots & 0 \\
+0 & 0 & \cdots & -1
+\end{bmatrix}_{n \times n}
+\\
+&=& \left| 0\dots 0 \right\rangle \left\langle 0 \dots 0 \right| - \left| 0 \dots 1 \right\rangle \left\langle 0 \dots 1 \right| -\dots - \left| 1 \dots 1\right\rangle \left\langle 1 \dots 1 \right|
+\end{matrix}
+\end{aligned}\]
+
+Usando o conceito de fase global, é possível escrever o resultado de
+outra forma, sendo ela:
+
+\[-\left| 0\dots 0 \right\rangle \left\langle 0 \dots 0 \right| + \left| 0 \dots 1 \right\rangle \left\langle 0 \dots 1 \right| + \dots + \left| 1 \dots 1\right\rangle \left\langle 1 \dots 1 \right|\]
+
+Para obter esse resultado, basta usar o oráculo de fase visto
+anteriormente e usá-lo para marcar o estado \(\left| 0 \right\rangle\).
+
+\subsubsection{Primeira Aplicação de $G$}\label{subsubsec:primeira-aplicacao-de-g}
+
+Antes de fazer as aplicações, temos:
+
+\[\begin{aligned}
+\begin{matrix}
+\left| \psi_0 \right\rangle &=& \left| + \right\rangle^{\otimes n} \\
+&=& \sum_{x \in \mathbb{B}_n} \dfrac{\left| x \right\rangle}{\sqrt{N}} \\
+&=& \sum_{\substack{x \in \mathbb{B}_n \\ x \ne x_0}}\dfrac{\left| x \right\rangle}{\sqrt{N}} + \dfrac{\left| x_0 \right\rangle}{\sqrt{N}} \\
+&=& \dfrac{\sqrt{N - 1}}{\sqrt{N}}\sum_{\substack{x \in \mathbb{B}_n \\ x \ne x_0}}\dfrac{\left| x \right\rangle}{\sqrt{N - 1}} + \dfrac{\left| x_0 \right\rangle}{\sqrt{N}} \\
+&=& \dfrac{\sqrt{N - 1}}{\sqrt{N}} \left| \alpha \right\rangle + \dfrac{1}{\sqrt{N}} \left| \beta \right\rangle
+\end{matrix}
+\end{aligned}\]
+
+Após a aplicação do oráculo (\autoref{fig:oraculo}):
+
+\[\begin{aligned}
+\begin{matrix}
+\left| \psi_1 \right\rangle &=& O_F \left| \psi_0 \right\rangle \\
+&=& \dfrac{\sqrt{N - 1}}{\sqrt{N}} \left| \alpha \right\rangle - \dfrac{1}{\sqrt{N}} \left| \beta \right\rangle
+\end{matrix}
+\end{aligned}\]
+
+\begin{figure}[!htb]
+  \centering
+  \includesvg[width=0.5\textwidth,height=\textheight]{utils/algoritmos/grover/oracle_application.svg}
+  \caption{Aplicação do oráculo de fase equivale a uma reflexão em relação ao eixo \(\left| \alpha \right\rangle\)\cite{giovani}.}
+  \label{fig:oraculo}
+\end{figure}
+
+Após a aplicação de \(2\left| \psi_0 \right\rangle \left\langle \psi_0 \right| - I\), \autoref{fig:difusor}:
+
+\[\begin{aligned}
+\begin{matrix}
+\left| \psi_2 \right\rangle &=& (2\left| \psi_0 \right\rangle \left\langle \psi_0 \right| - I) \left| \psi_1 \right\rangle \\
+&=& 2 \left\langle \psi_0 \mid \psi_1 \right\rangle \left| \psi_0 \right\rangle - \left| \psi_1 \right\rangle
+\end{matrix}
+\end{aligned}\]
+
+\begin{figure}[!htb]
+  \centering
+  \includesvg[width=0.5\textwidth,height=\textheight]{utils/algoritmos/grover/diffuser.svg}
+  \caption{Aplicação do operador \(2 \left| \psi_0 \right\rangle \left\langle \psi_0 \right| - I\) equivale a uma reflexão em relação à reta determinada pelo vetor \(\left| \psi_0 \right\rangle\)\cite{giovani}.
+  }
+  \label{fig:difusor}
+\end{figure}
+
+Com isso, após uma reflexão sobre o estado \(\left| \psi_0 \right\rangle\), tem-se o resultado da \autoref{fig:first-grover}.
+
+\begin{figure}[!htb]
+  \centering
+  \includesvg[width=0.5\textwidth,height=\textheight]{utils/algoritmos/grover/first_grover.svg}
+  \caption{Aplicação do operador \(G\).
+  O efeito corresponde à rotação do vetor por um ângulo \(\theta\) no sentido anti-horário\cite{giovani}.
+  }
+  \label{fig:first-grover}
+\end{figure}
+
+\subsection{Aplicações Sucessivas de \(G\)}\label{subsec:aplicacoes-sucessivas-de-g}
+
+A cada repetição tem-se uma rotação no sentido anti-horário, logo, o vetor estará se afastando de \(\left| \alpha\right\rangle\) e se aproximando de \(\left| \beta \right\rangle\) (item desejado), conforme a \autoref{fig:k-grover}.
+
+\begin{figure}[!htb]
+  \centering
+  \includesvg[width=0.5\textwidth,height=\textheight]{utils/algoritmos/grover/k_applications.svg}
+  \caption{Aplicações sucessivas do operador \(G\).}
+  \label{fig:k-grover}
+\end{figure}
+
+\subsubsection{Número de Aplicações}\label{subsubsec:numero-de-aplicacoes}
+
+O número de aplicações necessárias é dado por:
+
+\[k = \dfrac{\pi}{4} \cdot \sqrt{\dfrac{N}{M}}\]
+
+\input{chapters/alg/pratica-grover.tex}
